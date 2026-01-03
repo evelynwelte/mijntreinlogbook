@@ -1,0 +1,319 @@
+@import url('https://fonts.googleapis.com/css2?family=Almendra+SC&display=swap');
+html, body{
+  height: 100%;
+  overflow: hidden;   
+}
+
+body{
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #101010;
+}
+
+/* space for your train */
+body{ padding-bottom: 240px; }
+body{ padding-bottom: clamp(140px, 22vh, 260px); }
+.page {
+  min-height: 100vh;
+}
+
+        /* -------- HEADER (TITLE + HI WELKOM) -------- */
+.page-header {
+            text-align: center;
+             padding: 20px 20px 0;
+}
+
+.title {
+            font-family: "Playfair Display", serif;
+            font-size: 58px;
+            letter-spacing: 0.22em;
+            margin-bottom: 10px;
+            color: chocolate;
+}
+
+.header-line {
+            width: 400px;
+            height: 2px;
+            margin: 18px auto 0;
+            background-color: rgba(29, 63, 191, 0.35);
+            border-radius: 999px;
+}
+      /* -------- MAIN LAYOUT -------- */
+.layout {
+            display: flex;
+            align-items: flex-start;
+            margin-top: 20px;          
+            position: relative;
+}
+
+        /* vertical line between sidebar and content */
+.layout::before {
+  content: "";
+  position: absolute;
+            left: 190px;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: rgba(29, 63, 191, 0.12);
+}
+
+        /* -------- SIDEBAR -------- */
+.sidebar {
+            width: 180px;
+            padding: 10px 18px 40px 18px;
+            
+}
+
+.week-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.week-nav a {
+  font-size: 20px;
+  letter-spacing: 0.15em;
+  text-decoration: none;
+  color: chocolate;
+  text-transform: uppercase;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.week-nav a:hover {
+  transform: translateX(4px);
+  opacity: 0.7;
+  color: #4f94d4;
+}
+
+.week-nav a.active {
+  font-family: 'Almendra SC', serif;
+  font-weight: 700;
+  color: chocolate;
+}
+.week-nav a.active:hover {
+  color: #4f94d4;
+}
+
+/* -------- CONTENT -------- */
+.content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  color: black;  
+  
+}
+.content, .ticket-wrapper, .ticket-wrapper{
+   margin-right: 115px;                                                                                      
+}
+.wave-text span {
+  display: inline-block;
+  font-size: 4rem;
+  font-family: 'Almendra SC', serif;
+  animation: wave 2s ease-in-out infinite;
+  color: #4f94d4;
+  margin: 0 4px; /* Gebruik margin voor ruimte tussen letters ipv gap */
+}
+
+/* Elke letter krijgt een eigen vertraging van 0.1 seconde */
+.wave-text span:nth-child(1) { animation-delay: 0.0s; }
+.wave-text span:nth-child(2) { animation-delay: 0.1s; }
+.wave-text span:nth-child(3) { animation-delay: 0.2s; }
+.wave-text span:nth-child(4) { animation-delay: 0.3s; }
+.wave-text span:nth-child(5) { animation-delay: 0.4s; }
+.wave-text span:nth-child(6) { animation-delay: 0.5s; }
+.wave-text span:nth-child(7) { animation-delay: 0.6s; }
+
+@keyframes wave {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-25px); /* Iets hogere golf voor meer effect */
+    }
+}
+
+@keyframes wave {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+.intro {
+  width: min(900px, 92%);  
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 20px;
+  padding: 32px 40px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  white-space: normal;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(29, 63, 191, 0.08);
+}             
+.intro p {
+  font-size: 19px;
+  margin: 0 0 12px;
+  line-height: 1.7;
+  margin-bottom: 10px;
+ }
+
+ .intro h1{
+   padding: 0;
+   margin: 0;
+   box-sizing: border-box;
+ }
+
+.intro p + p {
+ margin-top: 6px;
+}
+.reveal{
+  opacity: 0;
+  transform: translateY(14px);
+  animation: revealUp 650ms ease forwards;
+}
+
+.r1{ animation-delay: 120ms; }
+.r2{ animation-delay: 420ms; }
+.r3{ animation-delay: 720ms; }
+
+@keyframes revealUp{
+  to{ opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Ticket machine ---------- */
+.ticket-machine{
+  width: min(520px, 100%);
+  margin: 24px auto 0;
+  border-radius: 22px;
+  padding: 18px;
+  background: chocolate;
+  border: 1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 18px 40px rgba(0,0,0,0.12);
+  backdrop-filter: blur(8px);
+  
+}
+
+.tm-top{
+  display:flex;
+  justify-content:center;
+  margin-bottom: 12px;
+  
+}
+
+.tm-label{
+  font-weight: 800;
+  letter-spacing: .25em;
+  color: black;
+  background: beige;
+  border: 1px solid rgba(29,63,191,0.18);
+  padding: 10px 18px;
+  border-radius: 16px; 
+}
+
+.tm-screen{
+  border-radius: 16px;
+  background: rgba(0,0,0,0.06);
+  border: 1px solid rgba(0,0,0,0.10);
+  padding: 14px;
+  margin-bottom: 14px;
+}
+
+.tm-screen-inner{
+  border-radius: 12px;
+  background: beige;
+  padding: 18px;
+  text-align: center;
+  font-weight: 600;
+  opacity: 0.8;
+}
+
+.tm-buttons{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 14px;
+  color: beige;
+}
+
+.tm-btn{
+  border: 1px solid rgba(0,0,0,0.18);
+  background: rgba(255,255,255,0.85);
+  border-radius: 12px;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: transform 120ms ease, opacity 120ms ease;
+  font-weight: 600;
+}
+
+.tm-btn:hover{ transform: translateY(-2px); opacity: .9; }
+
+.tm-slot{
+  height: 14px;
+  border-radius: 999px;
+  background: rgba(0,0,0,0.15);
+  margin-top: 4px;
+}
+
+/* ---------- Photo focus overlay ---------- */
+.photo-overlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 999999;
+}
+
+.photo-overlay.is-open{ display: flex; }
+
+.photo-view{
+  max-width: min(900px, 92vw);
+  max-height: 86vh;
+  border-radius: 18px;
+  box-shadow: 0 22px 60px rgba(0,0,0,0.45);
+  background: transparent;
+}
+.photo-close{
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 0;
+  cursor: pointer;
+  font-size: 20px;
+  background: rgba(255,255,255,0.9);
+}
+.header-image1 {
+  width: 750px;       
+  height: auto;
+  display: block;
+  margin: auto;         
+}
+:root{
+  --trainH: clamp(180px, 28vh, 340px);
+}
+
+#trainArea{
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--trainH);
+  z-index: 9999;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+#train{
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 100%;     /* responsive */
+  width: auto;      /* ✅ IMPORTANT: allow movement */
+  will-change: transform;
+}
+

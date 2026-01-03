@@ -1,0 +1,126 @@
+/* Page layout so the grid can sit in the middle */
+html, body{
+  height: 100%;
+  overflow: hidden;   /* ✅ removes vertical scroll */
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-image: url("ChatGPT Image 15 Ara 2025 16_11_07.png");
+  background-repeat: no-repeat;
+  
+  /* ✅ Forceer de afbeelding om de onderkant (de rails) altijd te tonen */
+  background-size: cover;
+  background-position: center bottom; 
+  
+  background-attachment: fixed;
+  min-height: 100vh;
+  overflow: hidden; 
+  display: flex;
+  flex-direction: column;
+  
+}
+
+/* If you use <div class="page"> keep this, otherwise you can remove it */
+.page{
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.page-header{
+  font-family: 'Almendra SC', serif;
+  text-align: center;
+  padding: 20px 20px 0;
+  color: chocolate;
+}
+.page-header p{
+    color:#5d3ead;
+    font-size: 22px;
+    font-family: 'Almendra SC', serif;
+}
+.title{
+ font-family: 'Almendra SC', serif;
+ font-size: 58px;
+ letter-spacing: 0.22em;
+ margin-bottom: 5px;
+ color: #872FD4;
+ 
+}
+
+.header-line{
+ width: 400px;
+ height: 2px;
+ margin: 18px auto 0;
+ background-color: rgba(29, 63, 191, 0.35);
+ border-radius: 999px;
+}
+
+/* Weeks grid in the MIDDLE of the page */
+.week-center {
+   font-family: 'Almendra SC', serif;
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(5, 130px); 
+  gap: 30px;
+  justify-content: center;
+  align-content: center;
+  
+  /* ✅ Verhoog deze marge als de stations nog te laag staan */
+  margin-top: -100px; 
+  
+  /* ✅ Zorgt dat stations niet over de rails/trein vallen */
+  padding-bottom: 250px; 
+}
+
+/* 3 buttons per row on medium screens */
+@media (max-width: 900px){
+  .week-center{
+    grid-template-columns: repeat(3, 160px);
+  }
+}
+
+/* 2 buttons per row on small screens */
+@media (max-width: 600px){
+  .week-center{
+    grid-template-columns: repeat(2, 160px);
+  }
+}
+
+.week-center a{
+  text-decoration: none;
+  padding: 10px 16px;
+  border: 1px solid #999;
+  border-radius: 10px;
+  color: #872FD4;
+  text-align: center;
+  background: beige;
+}
+:root {
+  /* Pas dit getal aan (bijv. 400px of 500px) tot de trein de juiste maat heeft */
+  --trainH: 450px; 
+}
+
+#trainArea {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* We maken de container hoog genoeg zodat de trein niet wordt afgesneden */
+  height: 400px; 
+  z-index: 9999;
+  pointer-events: none;
+  overflow: visible; 
+}
+
+#train {
+  position: absolute;
+  left: 0;
+  bottom: -50px;      /* ✅ Pas dit aan om de trein op de rails te zetten */
+  
+  /* ✅ HIER VERGROOT JE DE TREIN: */
+  height: 550px;     
+  
+  width: auto;
+  will-change: transform;
+}

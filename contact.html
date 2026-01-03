@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Form - Logbook</title>
+    <link rel="stylesheet" href="contact.css">
+    <link rel="stylesheet" href="assets/styles.css">
+    <link rel="stylesheet" href="assets/flexboxes.css">
+    <link rel="stylesheet" href="assets/nav.css">
+    <link rel="stylesheet" href="assets/typography.css">
+    <link rel="stylesheet" href="assets/forms.css">
+    <link rel="stylesheet" href="assets/modal.css">
+</head>
+<body>
+<div class="page">
+
+    <header class="page-header">
+        <h1 class="title"> c o n t a c t  M E : </h1>
+        <div class="header-line"></div>
+    </header>
+
+    <div class="layout">
+        <aside class="sidebar">
+            <nav class="week-nav">
+                <a href="mainpage.html">HOME</a>
+                <a href="week1.html">WEEK 1</a>
+                <a href="week2.html">WEEK 2</a>
+                <a href="week3.html">WEEK 3</a>
+                <a href="week4.html">WEEK 4</a>
+                <a href="week5.html">WEEK 5</a>
+                <a href="week6.html">WEEK 6</a>
+                <a href="week7.html">WEEK 7</a>
+                <a href="week8.html">WEEK 8</a>
+                <a href="week9.html">WEEK 9</a>
+                <a href="week10.html">WEEK 10</a>
+                <a href="contact.html" class="active">CONTACT</a>
+            </nav>
+        </aside>
+
+        <main class="contact">
+            <h1> </h1>
+            <form id="contactForm">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="email">E-mail:</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" rows="5" required></textarea>
+
+                <button type="submit">Submit</button>
+            </form>
+        </main>
+    </div> <div class="modal" id="confirmationModal">
+        <div class="modal-content">
+            <span class="modal-close" id="closeModal">&times;</span>
+            
+        </div>
+    </div>
+
+    <div id="trainArea" aria-hidden="true">
+        <img id="train" src="TRAIN.jpg" alt="train">
+    </div>
+
+</div> <script>
+document.addEventListener("DOMContentLoaded", () => {
+    // We selecteren alle links in de zijbalk voor de trein-animatie
+    const links = document.querySelectorAll(".week-nav a");
+    const trainArea = document.getElementById("trainArea");
+    const train = document.getElementById("train");
+    const contactForm = document.getElementById("contactForm");
+    const modal = document.getElementById("confirmationModal");
+    const closeModal = document.getElementById("closeModal");
+
+    let busy = false;
+
+    // --- FORMULIER LOGICA ---
+    if(contactForm) {
+        contactForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            modal.style.display = "block"; // Laat de modal zien
+            contactForm.reset(); // Maak formulier leeg
+        });
+    }
+
+    if(closeModal) {
+        closeModal.onclick = () => modal.style.display = "none";
+    }
+
+    // --- TREIN ANIMATIE LOGICA ---
+    function resetTrain() {
+        if (!train) return;
+        train.style.transition = "none";
+        train.style.transform = "translateX(0px)";
+        train.getBoundingClientRect();
+    }
+
+    function animateBottomTrain(durationMs = 2000) {
+        return new Promise((resolve) => {
+            if (!train || !trainArea) return resolve();
+            resetTrain();
+            const maxX = Math.max(0, trainArea.clientWidth - train.offsetWidth);
+            train.style.transition = `transform ${durationMs}ms ease`;
+            const fallback = setTimeout(resolve, durationMs + 80);
+            const done = (ev) => {
+                if (ev.propertyName !== "transform" && ev.propertyName !== "webkitTransform") return;
+                clearTimeout(fallback);
+                resolve();
+            };
+            train.addEventListener("transitionend", done, { once: true });
+            requestAnimationFrame(() => {
+                train.style.transform = `translateX(${maxX}px)`;
+            });
+        });
+    }
+
+    function showTrainLoader(durationMs = 1500) {
+        return new Promise((resolve) => {
+            let box = document.getElementById("miniTrainLoader");
+            if (!box) {
+                box = document.createElement("div");
+                box.id = "miniTrainLoader";
+                box.style.cssText = `position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 999999; background: rgba(255,255,255,0.95); border: 1px solid rgba(0,0,0,0.12); border-radius: 14px; padding: 16px 18px; display: none; pointer-events: none; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.12);`;
+                const img = document.createElement("img");
+                img.id = "miniTrainLoaderImg";
+                img.style.cssText = `width: 220px; max-width: 70vw; height: auto; display: block; margin: 0 auto;`;
+                const txt = document.createElement("div");
+                txt.textContent = "LOGBOOK...";
+                txt.style.cssText = `margin-top: 10px; font-family: Arial, sans-serif; opacity: .7;`;
+                box.appendChild(img);
+                box.appendChild(txt);
+                document.body.appendChild(box);
+            }
+            const img = document.getElementById("miniTrainLoaderImg");
+            img.src = train?.src || "";
+            box.style.display = "block";
+            img.animate([{ transform: "translateX(-10px)" }, { transform: "translateX(10px)" }, { transform: "translateX(-10px)" }], { duration: 500, iterations: Math.ceil(durationMs / 500) });
+            setTimeout(() => { box.style.display = "none"; resolve(); }, durationMs);
+        });
+    }
+
+    links.forEach((link) => {
+        link.addEventListener("click", async (e) => {
+            const targetHref = link.getAttribute("href");
+            if (targetHref.startsWith("#") || targetHref === "" || busy) return;
+            e.preventDefault();
+            busy = true;
+            await animateBottomTrain(2000);
+            await showTrainLoader(1500);
+            window.location.href = targetHref;
+        });
+    });
+
+    window.addEventListener("pageshow", () => {
+        busy = false;
+        resetTrain();
+    });
+});
+</script>
+</body>
+</html>

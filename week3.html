@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <head>
+  <meta charset="UTF-8">
+  <title>Logbook Webdeveloper</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Almendra+SC&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="week1.css">
+</head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <link rel="stylesheet" href="week3.css">
+  <link rel="stylesheet" href="tailwind.config.js">
+</head>
+
+<body>
+  <div class="page">
+
+    <!-- HEADER -->
+    <header class="page-header">
+      <div class="wave-container">
+      <h1 class="wave-text">
+        <span>F</span><span>I</span><span>G</span><span>M</span><span>A</span>
+    </h1>
+    </header>
+
+    <!-- SIDEBAR + CONTENT -->
+    <div class="layout">
+
+      <aside class="sidebar">
+        <nav class="week-nav">
+          <a href="mainpage.html" class="week-link active">HOME</a>
+          <a href="week1.html" class="week-link">STATION 1</a>
+          <a href="week2.html" class="week-link">STATION 2</a>
+          <a href="week3.html" class="week-link">STATION 3</a>
+          <a href="week4.html" class="week-link">STATION 4</a>
+          <a href="week5.html" class="week-link">STATION 5</a>
+          <a href="week6.html" class="week-link">STATION 6</a>
+          <a href="week7.html" class="week-link">STATION 7</a>
+          <a href="week8.html" class="week-link">STATION 8</a>
+          <a href="week9.html" class="week-link">STATION 9</a>
+          <a href="contact.html" class="week-link">contact</a>
+        </nav>
+      </aside>
+
+    <!--- <main class="content">
+        <section class="intro">
+          <img src="stationsbord.png" class="header-image1" alt="station board">
+        </section>
+      </main>
+
+    </div>
+  </div> --> 
+<main class="content">
+    <section class="intro">
+        
+        <p>Figma is een populaire webgebaseerde design- en prototypingtool die vooral wordt gebruikt voor UI/UX-design. Het staat bekend om zijn gebruiksvriendelijkheid, samenwerking in real-time en flexibiliteit. Omdat Figma volledig in de cloud werkt, kunnen teams moeiteloos samenwerken zonder software te hoeven installeren.</p>
+        <p>Figma Design is de belangrijkste tool voor het maken, delen en testen van ontwerpen voor websites, mobiele apps en andere digitale producten en ervaringen.</p>
+    </section>
+</main> <!-- this class for text-->
+   
+</div>
+</div>
+  <!-- ✅ Train at bottom (same image you use) -->
+  <div id="trainArea" aria-hidden="true">
+    <img id="train" src="TRAIN.jpg"  alt="train">
+  </div>
+
+  <!-- ✅ JS: train first (2s) -> loader (1.5s) -> navigate -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+  const links = document.querySelectorAll(".week-link");
+  const trainArea = document.getElementById("trainArea");
+  const train = document.getElementById("train");
+
+  let busy = false;
+
+  function resetTrain() {
+    if (!train) return;
+    train.style.transition = "none";
+    train.style.transform = "translateX(0px)";
+    train.getBoundingClientRect(); // force reflow
+  }
+
+  function animateBottomTrain(durationMs = 2000) {
+    return new Promise((resolve) => {
+      if (!train || !trainArea) return resolve();
+
+      resetTrain();
+
+      const maxX = Math.max(0, trainArea.clientWidth - train.offsetWidth);
+      train.style.transition = `transform ${durationMs}ms ease`;
+
+      // fallback (in case transitionend doesn't fire)
+      const fallback = setTimeout(resolve, durationMs + 80);
+
+      const done = (ev) => {
+        if (ev.propertyName !== "transform" && ev.propertyName !== "webkitTransform") return;
+        clearTimeout(fallback);
+        resolve();
+      };
+
+      train.addEventListener("transitionend", done, { once: true });
+
+      requestAnimationFrame(() => {
+        train.style.transform = `translateX(${maxX}px)`;
+      });
+    });
+  }
+
+  function showTrainLoader(durationMs = 2000) {
+    return new Promise((resolve) => {
+      let box = document.getElementById("miniTrainLoader");
+
+      if (!box) {
+        box = document.createElement("div");
+        box.id = "miniTrainLoader";
+        box.style.cssText = `
+          position: fixed;
+          left: 50%; top: 50%;
+          transform: translate(-50%, -50%);
+          z-index: 999999;
+          background: rgba(255,255,255,0.95);
+          border: 1px solid rgba(0,0,0,0.12);
+          border-radius: 14px;
+          padding: 16px 18px;
+          display: none;
+          pointer-events: none;
+          text-align: center;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+        `;
+
+        const img = document.createElement("img");
+        img.id = "miniTrainLoaderImg";
+        img.alt = "Loading train";
+        img.style.cssText = `
+          width: 220px;
+          max-width: 70vw;
+          height: auto;
+          display: block;
+          margin: 0 auto;
+        `;
+
+        const txt = document.createElement("div");
+        txt.textContent = "LOGBOOK...";
+        txt.style.cssText = `
+          margin-top: 10px;
+          font-family: Arial, sans-serif;
+          opacity: .7;
+        `;
+
+        box.appendChild(img);
+        box.appendChild(txt);
+        document.body.appendChild(box);
+      }
+
+      const img = document.getElementById("miniTrainLoaderImg");
+      img.src = train?.src || "TRAIN.jpg" ;
+
+      box.style.display = "block";
+
+      img.animate(
+        [
+          { transform: "translateX(-10px)" },
+          { transform: "translateX(10px)" },
+          { transform: "translateX(-10px)" }
+        ],
+        { duration: 500, iterations: Math.ceil(durationMs / 500) }
+      );
+
+      setTimeout(() => {
+        box.style.display = "none";
+        resolve();
+      }, durationMs);
+    });
+  }
+
+  links.forEach((link) => {
+    link.addEventListener("click", async (e) => {
+      e.preventDefault();
+      if (busy) return;
+      busy = true;
+
+      const targetHref = link.getAttribute("href");
+
+      await animateBottomTrain(2000);   // 1) train moves first (2s)
+      await showTrainLoader(900);      // 2) then loader (2s)
+      window.location.href = targetHref; // 3) go page
+    });
+  });
+
+  window.addEventListener("pageshow", () => {
+    busy = false;
+    resetTrain();
+  });
+});
+</script>
+
+</body>
+</html>

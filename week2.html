@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <link rel="stylesheet" href="week2.css">
+</head>
+
+<body>
+  <div class="page">
+
+    <!-- HEADER -->
+    <header class="page-header">
+      <h1 class="title"> ONTWERP PROCES</h1>
+      <div class="header-line"></div>
+    </header>
+
+    <!-- SIDEBAR + CONTENT -->
+      <div class="layout">
+
+      <aside class="sidebar">
+        <nav class="week-nav">
+          <a href="mainpage.html" class="week-link active">HOME</a>
+          <a href="week1.html" class="week-link">STATION 1</a>
+          <a href="week2.html" class="week-link">STATION 2</a>
+          <a href="week3.html" class="week-link">STATION 3</a>
+          <a href="week4.html" class="week-link">STATION 4</a>
+          <a href="week5.html" class="week-link">STATION 5</a>
+          <a href="week6.html" class="week-link">STATION 6</a>
+          <a href="week7.html" class="week-link">STATION 7</a>
+          <a href="week8.html" class="week-link">STATION 8</a>
+          <a href="week9.html" class="week-link">STATION 9</a>
+          <a href="contact.html" class="week-link">contact</a>
+        </nav>
+      </aside>
+
+<main class="content">
+  <div class="ticket-wrapper">
+    <section class="intro intro-animate">
+      <h2 class="reveal r1"></h2>
+
+      <p class="reveal r2">
+        De eerste stappen van het verhaal waren gericht op het ontwerpen van schetsen van de trein borden. Wat is belangrijke informatie en wat wil je de reizigers meegeven? hoe communiceer je duidelijk, met zo min mogelijk woorden, en maak je het toch zo concreet mogelijk. Waar valt de oog van de reiziger op? hoe zorg je ervoor dat de informatie snel en duidelijk overkomt? dit zijn enkele vragen die ik mezelf stelde tijdens het ontwerpproces.
+      </p>
+
+      <div class="ticket-machine reveal r3">
+        <div class="tm-top">
+          <div class="tm-label">TICKET</div>
+        </div>
+
+        <div class="tm-screen">
+          <div class="tm-screen-inner">Print Schetsen...</div>
+        </div>
+
+        <div class="tm-buttons">
+          <button class="tm-btn" data-photo="schets1.png">Photo 1</button>
+          <button class="tm-btn" data-photo="schets2.png">Photo 2</button>
+          <button class="tm-btn" data-photo="">Photo 3</button>
+        </div>
+
+        <div class="tm-slot"></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Photo overlay -->
+  <div id="photoOverlay" class="photo-overlay" aria-hidden="true">
+    <button class="photo-close" id="photoClose" aria-label="Close">✕</button>
+    <img id="photoView" class="photo-view" src="" alt="Selected photo">
+  </div>
+</main>
+
+  <!-- ✅ Train at bottom (same image you use) -->
+<div id="trainArea" aria-hidden="true">
+  <img id="train" src="TRAIN.jpg"  alt="train">
+</div>
+
+  <!-- ✅ JS: train first (2s) -> loader (1.5s) -> navigate -->
+  <script>
+     document.addEventListener("DOMContentLoaded", () => {
+      const links = document.querySelectorAll(".week-link");
+      const trainArea = document.getElementById("trainArea");
+      const train = document.getElementById("train");
+
+      let busy = false;
+
+      function resetTrain() {
+        if (!train) return;
+        train.style.transition = "none";
+        train.style.transform = "translateX(0px)";
+        train.getBoundingClientRect();
+      }
+
+      function animateBottomTrain(durationMs = 2000) {
+        return new Promise((resolve) => {
+          if (!train || !trainArea) return resolve();
+
+          resetTrain();
+
+          const maxX = Math.max(0, trainArea.clientWidth - train.offsetWidth);
+          train.style.transition = `transform ${durationMs}ms ease`;
+
+          const fallback = setTimeout(resolve, durationMs + 80);
+
+          const done = (ev) => {
+            if (ev.propertyName !== "transform" && ev.propertyName !== "webkitTransform") return;
+            clearTimeout(fallback);
+            resolve();
+          };
+
+          train.addEventListener("transitionend", done, { once: true });
+
+          requestAnimationFrame(() => {
+            train.style.transform = `translateX(${maxX}px)`;
+          });
+        });
+      }
+
+      function showTrainLoader(durationMs = 1500) { // ✅ 1.5 seconds
+        return new Promise((resolve) => {
+          let box = document.getElementById("miniTrainLoader");
+
+          if (!box) {
+            box = document.createElement("div");
+            box.id = "miniTrainLoader";
+            box.style.cssText = `
+              position: fixed;
+              left: 50%; top: 50%;
+              transform: translate(-50%, -50%);
+              z-index: 999999;
+              background: rgba(255,255,255,0.95);
+              border: 1px solid rgba(0,0,0,0.12);
+              border-radius: 14px;
+              padding: 16px 18px;
+              display: none;
+              pointer-events: none;
+              text-align: center;
+              box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+            `;
+
+            const img = document.createElement("img");
+            img.id = "miniTrainLoaderImg";
+            img.alt = "Loading train";
+            img.style.cssText = `
+              width: 220px;
+              max-width: 70vw;
+              height: auto;
+              display: block;
+              margin: 0 auto;
+            `;
+
+            const txt = document.createElement("div");
+            txt.textContent = "LOGBOOK...";
+            txt.style.cssText = `
+              margin-top: 10px;
+              font-family: Arial, sans-serif;
+              opacity: .7;
+            `;
+
+            box.appendChild(img);
+            box.appendChild(txt);
+            document.body.appendChild(box);
+          }
+
+          const img = document.getElementById("miniTrainLoaderImg");
+          img.src = train?.src || "./steam-train-with-wagons-vector-55166136.jpg";
+
+          box.style.display = "block";
+
+          img.animate(
+            [
+              { transform: "translateX(-10px)" },
+              { transform: "translateX(10px)" },
+              { transform: "translateX(-10px)" }
+            ],
+            { duration: 500, iterations: Math.ceil(durationMs / 500) }
+          );
+
+          setTimeout(() => {
+            box.style.display = "none";
+            resolve();
+          }, durationMs);
+        });
+      }
+
+      links.forEach((link) => {
+        link.addEventListener("click", async (e) => {
+          e.preventDefault();
+          if (busy) return;
+          busy = true;
+
+          const targetHref = link.getAttribute("href");
+
+          await animateBottomTrain(2000);  // train 2s
+          await showTrainLoader(1500);     // loader 1.5s
+          window.location.href = targetHref;
+        });
+      });
+
+      window.addEventListener("pageshow", () => {
+        busy = false;
+        resetTrain();
+      });
+    });
+  // Ticket machine buttons -> show photo overlay
+  const overlay = document.getElementById("photoOverlay");
+  const photoView = document.getElementById("photoView");
+  const closeBtn = document.getElementById("photoClose");
+
+  document.querySelectorAll(".tm-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const src = btn.getAttribute("data-photo");
+      photoView.src = src;
+      overlay.classList.add("is-open");
+      overlay.setAttribute("aria-hidden", "false");
+    });
+  });
+
+  function closeOverlay(){
+    overlay.classList.remove("is-open");
+    overlay.setAttribute("aria-hidden", "true");
+    photoView.src = "";
+  }
+
+  closeBtn.addEventListener("click", closeOverlay);
+
+  // close when clicking outside image
+  overlay.addEventListener("click", (e) => {
+    if (e.target === overlay) closeOverlay();
+  });
+
+  // ESC to close
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeOverlay();
+  });
+</script>
+
+
+</body>
+</html>
